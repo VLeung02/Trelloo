@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "devtest-cef63": {
+      "hosting": {
+        "kanban-fire": [
+          "devtest-cef63"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "devtest-cef63"
+  }
+}
