@@ -14,7 +14,6 @@ import { FormsModule } from '@angular/forms';
 import { TaskComponent } from './task/task.component';
 import { TaskDialogComponent } from './task-dialog/task-dialog.component';
 import { environment } from 'src/environments/environment';
-import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 
@@ -30,7 +29,6 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
     MatToolbarModule,
     MatIconModule,
     MatCardModule,
@@ -40,7 +38,8 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
     MatInputModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

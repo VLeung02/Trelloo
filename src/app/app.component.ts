@@ -3,32 +3,20 @@ import { Task } from './task/task';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { MatDialog } from '@angular/material/dialog';
 import { TaskDialogComponent, TaskDialogResult } from './task-dialog/task-dialog.component';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
-import { BehaviorSubject } from 'rxjs';
-
-
-
-const getObservable = (collection: AngularFirestoreCollection<Task>) => {
-  const subject = new BehaviorSubject<Task[]>([]);
-  collection.valueChanges({ idField: 'id' }).subscribe((val: Task[]) => {
-    subject.next(val);
-  });
-  return subject;
-};
-
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   todo = this.store.collection('todo').valueChanges({ idField: 'id' }) as Observable<Task[]>;
   inProgress = this.store.collection('inProgress').valueChanges({ idField: 'id' }) as Observable<Task[]>;
   done = this.store.collection('done').valueChanges({ idField: 'id' }) as Observable<Task[]>;
 
-  constructor(private dialog: MatDialog, private store: AngularFirestore) {}
+  constructor(private dialog: MatDialog, private store: AngularFirestore) { }
 
   newTask(): void {
     const dialogRef = this.dialog.open(TaskDialogComponent, {
@@ -39,7 +27,7 @@ export class AppComponent {
     });
     dialogRef
       .afterClosed()
-      .subscribe((result: TaskDialogResult | undefined) => {
+      .subscribe((result: TaskDialogResult) => {
         if (!result) {
           return;
         }
@@ -55,7 +43,7 @@ export class AppComponent {
         enableDelete: true,
       },
     });
-    dialogRef.afterClosed().subscribe((result: TaskDialogResult|undefined) => {
+    dialogRef.afterClosed().subscribe((result: TaskDialogResult) => {
       if (!result) {
         return;
       }
@@ -67,9 +55,11 @@ export class AppComponent {
     });
   }
 
-
-  drop(event: CdkDragDrop<Task[]>): void {
+  drop(event: CdkDragDrop<Task[] | null>): void {
     if (event.previousContainer === event.container) {
+      return;
+    }
+    if (!event.previousContainer.data || !event.container.data) {
       return;
     }
     const item = event.previousContainer.data[event.previousIndex];
